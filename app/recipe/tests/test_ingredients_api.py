@@ -22,7 +22,7 @@ class PublicIngredientsApiTests(TestCase):
         '''Test that login is required to acces endpoint'''
         res = self.client.get(INGREDIENT_URL)
 
-        self.assertEqual(res.status_code, status. HTTP_401_UNAUTHORIZED)
+        self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
 
 class PrivateIngredientsApiTests(TestCase):
     '''Test the private ingredients API'''
@@ -34,6 +34,7 @@ class PrivateIngredientsApiTests(TestCase):
         'TestPass123'
         )
         self.client.force_authenticate(self.user)
+
     def test_retrive_ingredients_list(self):
         '''Test retrieving the list of ingredients'''
         Ingredient.objects.create( user = self.user, name = 'Kale')
@@ -41,7 +42,7 @@ class PrivateIngredientsApiTests(TestCase):
 
         res = self.client.get(INGREDIENT_URL)
 
-        ingredients = Igredient.objects.all().order_by('-name')
+        ingredients = Ingredient.objects.all().order_by('-name')
         serializer = IngredientSerializer(ingredients, many = True)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(res.data, serializer.data)
@@ -53,7 +54,7 @@ class PrivateIngredientsApiTests(TestCase):
             'TestPass123'
         )
         Ingredient.objects.create(user = user2, name = 'Winegar')
-        ingredient = Ingredient.objects.create(user = self.user, nsme = 'Tumeric')
+        ingredient = Ingredient.objects.create(user = self.user, name = 'Tumeric')
 
         res = self.client.get(INGREDIENT_URL)
 
@@ -65,7 +66,7 @@ class PrivateIngredientsApiTests(TestCase):
         '''Test creating a new ingredient'''
         payload = {'name': 'Cabbage'}
         self.client.post(INGREDIENT_URL, payload)
-        exists = Ingredient.object.filter(
+        exists = Ingredient.objects.filter(
         user = self.user,
         name = payload['name'],
         ).exists()

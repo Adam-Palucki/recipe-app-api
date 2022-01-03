@@ -40,7 +40,8 @@ class PublicUserApiTests(TestCase):
         '''Test creating user that already exists fails'''
         payload = {
                     'email': 'test1@drawnet.pl',
-                    'password': 'testpass'
+                    'password': 'testpass',
+                    'name': 'Test'
         }
         create_user(**payload)
         res = self.client.post(CREATE_USER_URL, payload)
