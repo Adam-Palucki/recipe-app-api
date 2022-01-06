@@ -58,3 +58,19 @@ class Ingredient(models.Model):
 
     def __str__(self):
         return self.name
+
+class Recipe(models.Model):
+    '''Recipe object'''
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete = models.CASCADE
+    )
+    title = models.CharField(max_length = 255)
+    time_minutes = models.IntegerField()
+    price = models.DecimalField(max_digits = 5, decimal_places = 2)
+    link = models.CharField(max_length = 255, blank = True)  ## blank=True is great to do when field is optional and we will in the future check if field ha s value.
+    ingredients = models.ManyToManyField('Ingredient')  # using string model name gives that you no need to maintain right order of the models.
+    tags = models.ManyToManyField('Tag')
+
+    def __str__(self):
+        return self.title
